@@ -1,17 +1,11 @@
 from flask import Flask, render_template, request, redirect, url_for, jsonify
 from flask_bootstrap import Bootstrap
 from flask_sqlalchemy import SQLAlchemy
-from collections import OrderedDict
+
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///all_books.db'
-app.json.sort_keys = False  
 Bootstrap(app)
 db = SQLAlchemy(app)
-
-@app.before_request
-def csrf_bypass_for_api():
-    if request.path.startswith('/api/'):
-        setattr(request, '_csrf_valid', True)
 
 class Book(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -20,17 +14,15 @@ class Book(db.Model):
     rating = db.Column(db.Float, nullable=False)
 
     def to_dict(self):
-        return OrderedDict([
-            ("id", self.id),
-            ("title", self.title),
-            ("author", self.author),
-            ("rating", self.rating)
-        ])
+        return {
+            "id": self.id,
+            "title": self.title,
+            "author": self.author,
+            "rating": self.rating
+        }
 
 with app.app_context():
     db.create_all()
-
-# --- ORIGINAL HTML FRONTEND ROUTES ---
 
 @app.route('/', methods=['POST', 'GET'])
 def home(): 
@@ -64,7 +56,7 @@ def editBook():
     return render_template('editBook.html', requestedBook=requestedBook)
 
 @app.route('/delete')
-def delete():
+def delete(): 
     bookId = request.args.get('id')
     bookToDelete = db.session.get(Book, bookId)
     if bookToDelete:
@@ -73,8 +65,7 @@ def delete():
     return redirect(url_for('home'))
 
 
-#REST API CRUD 
-
+# REST API 
 @app.route('/api/books', methods=['GET'])
 def get_books():
     books = db.session.execute(db.select(Book)).scalars().all()
@@ -103,6 +94,7 @@ def create_book():
     db.session.commit()
     return jsonify(book.to_dict()), 201
 
+
 @app.route('/api/books/<int:book_id>', methods=['PUT'])
 def update_book(book_id):
     book = db.session.get(Book, book_id)
@@ -122,6 +114,7 @@ def update_book(book_id):
 
     db.session.commit()
     return jsonify(book.to_dict()), 200
+
 
 @app.route('/api/books/<int:book_id>', methods=['DELETE'])
 def delete_book(book_id):
