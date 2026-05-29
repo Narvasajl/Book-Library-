@@ -2,6 +2,7 @@ from flask import Flask, render_template, request, redirect, url_for, jsonify
 from flask_bootstrap import Bootstrap
 from flask_sqlalchemy import SQLAlchemy
 from collections import OrderedDict
+
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///all_books.db'
 app.json.sort_keys = False  
@@ -30,7 +31,6 @@ class Book(db.Model):
 with app.app_context():
     db.create_all()
 
-# --- ORIGINAL HTML FRONTEND ROUTES ---
 
 @app.route('/', methods=['POST', 'GET'])
 def home(): 

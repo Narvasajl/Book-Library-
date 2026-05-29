@@ -5,9 +5,9 @@ To run the application, install the required packages using the command
                     pip install -r requirements.txt
 
 
-Updated with REST API Extension Features 
+This project is an extension of the local Book Library application. Updated with REST API Extension Features 
 
-The system now includes a RESTful API that supports full CRUD operations. This allows the backend to handle data separately from the HTML frontend.
+The system now includes a RESTful API that supports full CRUD operations. 
 
 Added Features:
 
@@ -24,7 +24,25 @@ Dependencies:
 - Frontend: Flask-Bootstrap (Legacy)
 - Testing: pytest, pytest-cov
 
-Running Tests
+
+This project is an extension of the local Book Library application. It is updated with new REST API features and automated testing to make the system stable.
+
+Added Features:
+
+- JSON Endpoints: Created Flask `@app.route()` routes under `/api/books` that send and receive clean JSON data.
+- Clear URL Parameters: Used `<int:book_id>` in the routes. This prevents endpoint conflicts and makes handling data parameters safe and simple.
+- Test Coverage: Added automated tests using `pytest`. It uses an in-memory SQLite database so tests run safely in RAM without changing your real database files.
+- OpenAPI 3.0 Support: Included an `openapi.yaml` file to document all API requests, responses, and validation rules.
+
+Dependencies:
+
+- Language: Python 3.13+
+- Framework: Flask (Web framework)
+- Database: Flask-SQLAlchemy (SQLite)
+- Frontend: Flask-Bootstrap (Legacy layout)
+- Testing: `pytest` and `pytest-cov` (For test coverage)
+
+Running Tests:
 
 To check that the REST API works correctly and does not break the existing frontend, activate your virtual environment and run:
 
